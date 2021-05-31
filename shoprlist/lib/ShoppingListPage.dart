@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'dart:async';
 import 'Model.dart';
 import 'package:flutter/material.dart';
+import 'cartPage.dart';
 
 
 class ShopingList extends StatefulWidget {
@@ -80,44 +81,12 @@ class _ShopingListState extends State<ShopingList> {
 
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          final tiles = _saved.map(
-            (ShopItem item) {
-              var negIcoBut = new IconButton(
-                icon: new Icon(Icons.remove),
-                onPressed: () => setState(() => item.amount--));
-
-              var textField = new Text(item.amount.toString());
-
-              var posIcoBut =new IconButton(
-                icon: new Icon(Icons.add),
-                onPressed: () => setState(() => item.amount++));
-            
-
-              return ListTile(
-                title: Text(item.title, style: _biggerFont),
-                trailing: 
-                    Row(
-                      children: <Widget>[
-                        negIcoBut, Text(item.amount.toString()), posIcoBut
-                      ],
-                      mainAxisSize: MainAxisSize.min,
-                    )
-
-              );
-            },
-          );
-
-          final divided = tiles.isNotEmpty ? ListTile.divideTiles(context: context, tiles: tiles).toList() : <Widget>[];
-
-          divided.add(showPrimaryButton());
 
           var indTiles = List.generate(_saved.length, (index) => ListTileItems(
                 
                 cartItem: _saved.elementAt(index),
 
               ));
-
-          
 
           final itrTiles = indTiles.isNotEmpty ? ListTile.divideTiles(context: context, tiles: indTiles).toList() : <Widget>[];
           itrTiles.add(showPrimaryButton());
@@ -137,7 +106,6 @@ class _ShopingListState extends State<ShopingList> {
   }
 
   Widget showPrimaryButton() {
-
 
     return new Padding(
         padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
@@ -214,52 +182,4 @@ class _ShopingListState extends State<ShopingList> {
     );
   }
 
-}
-
-class ListTileItems extends StatefulWidget {
-  ShopItem cartItem;
-
-  ListTileItems({this.cartItem});
-
-  @override
-  _ListTileItemsState createState() => _ListTileItemsState();
-}
-
-class _ListTileItemsState extends State<ListTileItems> {
-  int itemCount = 0;
-
-  @override
-  Widget build(BuildContext context) {
-
-    return new ListTile(
-
-      title: new Text(widget.cartItem.title),
-      trailing: new Row(
-        children: <Widget>[
-          itemCount != 0 ?
-
-          new IconButton(
-            icon: new Icon(Icons.remove),
-            onPressed: () => setState(() {
-              itemCount--;
-              widget.cartItem.amount--;
-            }),
-          )
-
-          : new Container(), new Text(itemCount.toString()),
-
-          new IconButton(
-            icon: new Icon(Icons.add),
-            onPressed: () => setState(() {
-              itemCount++;
-              widget.cartItem.amount++;
-            })
-          )
-
-        ],
-        mainAxisSize: MainAxisSize.min,
-      ),
-
-    );
-  }
 }
